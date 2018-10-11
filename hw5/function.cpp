@@ -2,8 +2,6 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <stack>
-#include <locale>
 #include <utility>
 #include <queue>
 
