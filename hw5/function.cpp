@@ -19,7 +19,7 @@ vector<string>& findFunction(string ch);
 
 int main(void) {
 	int N, k1, k2;
-	ifstream ifp("3.inp");
+	ifstream ifp("function.inp");
 	ifp >> N, ifp >> k1, ifp >> k2;
 	string str;
 	vector<string> vecstr;
@@ -39,10 +39,11 @@ int main(void) {
 		ofp << "DEADLOCK" << std::endl;
 		return 0;
 	}
-	pair<string, string> k1str;
-	pair<string, string> k2str;
+	pair<string, string> k1str = make_pair("", "");
+	pair<string, string> k2str = make_pair("", "");
+	int size = statement.size();
 	int i = 0;
-	while(i < statement.size()) {
+	while(i < size) {
 		if (i == k1-1)
 			k1str = std::make_pair(statement.front().first,statement.front().second);
 		if (i == k2-1)
@@ -50,12 +51,12 @@ int main(void) {
 		statement.pop();
 		i++;
 	}
-	if (i <= k1 - 1)
+	if (k1str.first == "")
 		ofp << "NONE" << std::endl;
 	else
 		ofp << k1str.first << "-" << k1str.second << std::endl;
 
-	if (i <= k2 - 1)
+	if (k2str.first == "")
 		ofp << "NONE" << std::endl;
 	else
 		ofp << k2str.first << "-" << k2str.second << std::endl;
