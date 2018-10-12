@@ -20,8 +20,8 @@ vector<queue<information_t>>::iterator selectCalculator(void);
 
 int main(void) {
 	int N, k;
-	std::ifstream ifp("3.inp");
-	std::ofstream ofp("shoppping.out");
+	std::ifstream ifp("shopping.inp");
+	std::ofstream ofp("shopping.out");
 	ifp >> N, ifp >> k;
 
 	queue <information_t> _cal;
