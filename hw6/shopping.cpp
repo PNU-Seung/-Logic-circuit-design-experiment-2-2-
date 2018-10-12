@@ -20,7 +20,7 @@ vector<queue<information_t>>::iterator selectCalculator(void);
 
 int main(void) {
 	int N, k;
-	std::ifstream ifp("1.inp");
+	std::ifstream ifp("2.inp");
 	std::ofstream ofp("shoppping.out");
 	ifp >> N, ifp >> k;
 	
@@ -42,7 +42,25 @@ int main(void) {
 			// id + 이전까지의 물건 갯수 + 새로 추가되는 물건 갯수
 		customer.pop();
 	}
-
+	int size = 0;
+	int time = 0;
+	for (vector<queue<information_t>>::reverse_iterator iter = calculator.rbegin(); iter != calculator.rend(); ++iter)
+		if (iter->empty())
+			size++;
+	while (size != k) {
+		for (vector<queue<information_t>>::reverse_iterator iter = calculator.rbegin(); iter != calculator.rend(); ++iter) {
+			if (not(iter->empty())) {
+				if ((iter->front().second) == time) {
+					ofp << iter->front().first << std::endl;
+					std::cout << iter->front().first << " " << iter->front().second << std::endl;
+					iter->pop();
+				}
+				if (iter->empty())
+					size++;
+			}
+		}
+		time++;
+	}
 
 	return 0;
 
