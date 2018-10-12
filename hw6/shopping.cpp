@@ -20,10 +20,10 @@ vector<queue<information_t>>::iterator selectCalculator(void);
 
 int main(void) {
 	int N, k;
-	std::ifstream ifp("2.inp");
+	std::ifstream ifp("3.inp");
 	std::ofstream ofp("shoppping.out");
 	ifp >> N, ifp >> k;
-	
+
 	queue <information_t> _cal;
 	for (int i = 0; i < k; i++)
 		calculator.push_back(_cal);
@@ -52,7 +52,6 @@ int main(void) {
 			if (not(iter->empty())) {
 				if ((iter->front().second) == time) {
 					ofp << iter->front().first << std::endl;
-					std::cout << iter->front().first << " " << iter->front().second << std::endl;
 					iter->pop();
 				}
 				if (iter->empty())
@@ -61,7 +60,7 @@ int main(void) {
 		}
 		time++;
 	}
-
+	ofp.close();
 	return 0;
 
 }
