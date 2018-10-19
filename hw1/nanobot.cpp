@@ -6,11 +6,7 @@ using namespace std;
 int arr[1000][1000] = { 0 };
 
 int main(void) {
-	/*
-	int **arr = new int*[1000];
-		for(int i =0; i<1000;i++)
-			arr[i] = new int[1000];
-	*/
+
 	int sizeX, sizeY;
 	int pos_x, pos_y;
 	int number;
@@ -92,10 +88,5 @@ int main(void) {
 	out << resultXpos << " " << resultYpos << endl;
 
 	out.close();
-	/*
-		for (int i = 0; i < 1000; i++)
-			delete[] arr[i];
-		delete[] arr;
-	*/
 	return 0;
 }
