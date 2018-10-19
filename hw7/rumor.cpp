@@ -1,4 +1,3 @@
-//can't build visual studio
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -13,7 +12,7 @@ ofstream ofp("rumor.out");
 int N, x, d;
 ifp >> N >> x >> d;
 vector<vector<int>> socialNetwork;
-int rumor[N];
+int rumor[N]; //can't build visual studio
 fill_n(rumor, N, -1);
 int num1, num2;
 for(int i=0; i<N; i++){
