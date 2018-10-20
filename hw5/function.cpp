@@ -9,11 +9,8 @@ using namespace std;
 
 vector<string> functionStatement;
 queue< pair<string,string> > statement;
-
 vector< vector<string> > function;
-
 int callingFunction(vector<string> _function);
-vector<string>& findFunction(string ch);
 
 int main(void) {
 	int N, k1, k2;
@@ -21,7 +18,6 @@ int main(void) {
 	ifp >> N, ifp >> k1, ifp >> k2;
 	string str;
 	vector<string> vecstr;
-
 
 	for (int i = 0; i < N; i++) {
 		vecstr = vector<string>();
@@ -62,13 +58,6 @@ int main(void) {
 	ofp.close();
 	return 0;
 }
-vector<string>& findFunction(string ch) {
-	for (vector< vector<string> >::iterator iter = function.begin(); iter != function.end(); iter++) {
-		if ((*iter).front() == ch)
-			return (*iter);
-	}
-}
-
 int callingFunction(vector<string> _function) {
 	for (vector<string>::const_iterator iter = functionStatement.begin(); iter != functionStatement.end(); iter++)
 	{
@@ -80,7 +69,7 @@ int callingFunction(vector<string> _function) {
 
 	for (vector<string>::iterator iter = _function.begin() + 1; iter != _function.end(); iter++) {
 		if (isupper( (*iter).front() )){
-			if (callingFunction(findFunction((*iter))) == -1)
+			if (callingFunction(*find_if(function.begin(), function.end(), [=](vector<string>& vec) { return (*iter) == vec.front(); })) == -1)
 				return -1;
 		}
 		else
