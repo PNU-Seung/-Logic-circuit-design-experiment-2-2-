@@ -33,37 +33,28 @@ int main(void) {
 		ofp << "DEADLOCK" << std::endl;
 		return 0;
 	}
-	pair<string, string> k1str = make_pair("", "");
-	pair<string, string> k2str = make_pair("", "");
+	pair<string, string> k1str = make_pair("NONE", "");
+	pair<string, string> k2str = make_pair("NONE", "");
 	int size = statement.size();
 	int i = 0;
 	while(i < size) {
 		if (i == k1-1)
-			k1str = std::make_pair(statement.front().first,statement.front().second);
+			k1str = std::make_pair(statement.front().first+"-",statement.front().second);
 		if (i == k2-1)
-			k2str = std::make_pair(statement.front().first, statement.front().second);
+			k2str = std::make_pair(statement.front().first+"-", statement.front().second);
 		statement.pop();
 		i++;
 	}
-	if (k1str.first == "")
-		ofp << "NONE" << std::endl;
-	else
-		ofp << k1str.first << "-" << k1str.second << std::endl;
-
-	if (k2str.first == "")
-		ofp << "NONE" << std::endl;
-	else
-		ofp << k2str.first << "-" << k2str.second << std::endl;
+	ofp << k1str.first << k1str.second << std::endl;
+	ofp << k2str.first << k2str.second << std::endl;
 
 	ofp.close();
 	return 0;
 }
 int callingFunction(vector<string> _function) {
 	for (vector<string>::const_iterator iter = functionStatement.begin(); iter != functionStatement.end(); iter++)
-	{
 		if ((*iter) == _function.front())
 			return -1;
-	}
 
 	functionStatement.push_back(_function.front());
 
