@@ -4,7 +4,7 @@
 #include <fstream>
 #include <utility>
 #include <queue>
-
+#include <algorithm>
 using namespace std;
 
 vector<string> functionStatement;

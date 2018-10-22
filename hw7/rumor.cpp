@@ -5,7 +5,6 @@
 #include <queue>
 using namespace std;
 
-
 int main(void){
 ifstream ifp("rumor.inp");
 ofstream ofp("rumor.out");
