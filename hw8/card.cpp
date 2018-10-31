@@ -1,10 +1,4 @@
-#include <iostream>
-#include <list>
-#include <fstream>
-#include <string>
-#include <numeric> // void iota(iter begin, iter end ,start num)
-#include <iterator> // void advance(iter, n)
-
+#include <bits/stdc++.h>
 using namespace std;
 
 void cut(list<int>& _cards, int begin, int end);
@@ -14,7 +8,7 @@ int main(void) {
 	ifstream ifp("card.inp");
 	int cardCount, instructionCount; // 카드 수, 명령 수(사용x);
 	ifp >> cardCount >> instructionCount;
-	
+
 	list<int> card(cardCount);
 	iota(card.begin(), card.end(), 1); // card : 1~ 카드수까지 할당.
 
@@ -32,7 +26,7 @@ int main(void) {
 	ofstream ofp("card.out");
 	list<int>::const_iterator iter = card.begin();
 	advance(iter, (card.size() / 2) - 1);	// floor(N/2)번째를 가르키는 iterator
-	
+
 	ofp << card.front() << " " <<(*iter) <<" "<< card.back() << endl;
 	ofp.close();
 
@@ -42,7 +36,7 @@ int main(void) {
 void shuffle(list<int>& _cards) {
 	list<int>DeckA, DeckB;
 	list<int>::iterator iter = _cards.begin();
-	
+
 	advance(iter, ((_cards.size()+1)/2)-1);	// ceiling(N/2)번째를 가르키는 iterator
 
 	DeckA.splice(DeckA.begin(), _cards, _cards.begin(), ++iter); // Deck A =1~ ceil(N/2)
