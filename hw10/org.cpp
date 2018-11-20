@@ -30,7 +30,13 @@ public:
 	friend int countHeight(const org* node, int height);
 	friend void setServantCount(org* node);
 };
-
+int countHeight(const org* node, int height = 0) {
+	height += 1;
+	if (node->boss == NULL)
+		return height * (-1);
+	else
+		return countHeight(node->boss, height);
+}
 void setServantCount(org* node) {
 	org* iter = node->boss;
 	while (iter != NULL) {
@@ -38,14 +44,6 @@ void setServantCount(org* node) {
 		iter = iter->boss;
 	}
 }
-int countHeight(const org* node, int height = 0) {
-	height += 1;
-	if (node->boss == NULL)
-		return height*(-1);
-	else
-		return countHeight(node->boss, height);
-}
-
 int main(void) {
 	ifstream ifp("org.inp");
 	list<org> Organization;
