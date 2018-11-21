@@ -43,112 +43,57 @@ public:
 		}
 	}
 	void deleteData(string word) {
-		tree* iter = this;
-		while (iter != nullptr && iter->word != word) {
-			if (iter->word > word)
-				iter = iter->left;
-			else if (iter->word < word)
-				iter = iter->right;
-		}// find
-		if (!iter)
-			return; // not exist.
-		else if (iter == this) {
-
-		}
-		else {
-
-		}
-
+		tree* upperNode = nullptr;
+		tree* deleteNode = this;
+		while (deleteNode != nullptr && deleteNode->word != word) {
+			upperNode = deleteNode;
+			if (deleteNode->word > word)
+				deleteNode = deleteNode->left;
+			else if (deleteNode->word < word)
+				deleteNode = deleteNode->right;
+		} // find node -> 찾으면 deleteNode에, 상위노드는 upperNode.
 		
+		if (!deleteNode)
+			return; // not exist.
+		
+		if (deleteNode->left == nullptr && deleteNode->right == nullptr) {
+			delete deleteNode;
+			if (upperNode->word > word)
+				upperNode->left = nullptr;
+			else if (upperNode->word < word)
+				upperNode->right = nullptr;
+		}
+		else if (deleteNode->left != nullptr) {
+			tree* iter = deleteNode->left;
+			while (iter->right != nullptr) {
+				upperNode = iter;
+				iter = iter->right;
+			} // 왼쪽부트리의 최대값 찾기
+			deleteNode->word = iter->word; // 기존값을 지우고 최대값으로 교체.
+
+			if (iter->left)
+				upperNode->right = iter->left;
+			else
+				upperNode->right = iter;
+			delete iter;
+		}
+		else { //deleteNode->right != nullptr
+			tree* iter = deleteNode->right;
+			while (iter->left != nullptr) {
+				upperNode = iter;
+				iter = iter->left;
+			} // 오른쪽부트리의 최소값 찾기
+			deleteNode->word = iter->word; // 기존값을 지우고 최소값으로 교체.
+
+			if (iter->right)
+				upperNode->left = iter->right;
+			else
+				upperNode->left = iter;
+			delete iter;
+		}
 	}
-
-
 };
-/*
-tree* find_max(tree* node) {
-	if (!node)
-		return nullptr;
-	if (node->right == nullptr)
-		return node;
-	else
-		return find_max(node->right);
 
-}
-tree* find_min(tree* node) {
-	if (!node)
-		return nullptr;
-	if (node->left == nullptr)
-		return node;
-	else
-		return find_min(node->left);
-}
-tree* find_data(tree* node, string word) {
-	if (!node)
-		return nullptr;
-	if (node->word == word)
-		return node;
-	else if (node->word > word) {
-		return find_data(node->left, word);
-	}
-	else { // node->word < word
-		return find_data(node->right, word);
-	}
-}
-tree* upperNode(tree* node, tree* target) {
-	if (node->left == target || node->right == target)
-		return node;
-	else {
-		if (node->word > target->word)
-			return upperNode(node->left, target);
-		else
-			return upperNode(node->right, target);
-	}
-
-}
-void addData(string word, tree* node, int depth = 0) {
-	depth++;
-	if (!node) {
-		node = new tree(word, depth);
-		return;
-	}
-	if (node->word == word) {
-		return;
-	}
-	else if (node->word < word) { // right
-		if (node->right == nullptr) {
-			node->right = new tree(word, depth);
-		}
-		else
-			addData(word, node->right, depth);
-	}
-	else { // left
-		if (node->left == nullptr) {
-			node->left = new tree(word, depth);
-		}
-		else
-			addData(word, node->left, depth);
-	}
-}
-void deleteData(string word , tree* node) {
-	tree* iter = find_data(node, word);
-	if (!iter)
-		return;
-
-	if (iter->left != nullptr) {
-		tree* iterMax = find_max(iter->left);
-		if (iterMax->right != nullptr) {
-			iterMax->word = iterMax->right->word;
-			delete iterMax->right;
-			iterMax->right = nullptr;
-		}
-		else {
-
-		}
-	}
-	
-
-}
-*/
 int main(void) {
 	tree* BST = nullptr;
 	if (BST == nullptr)
