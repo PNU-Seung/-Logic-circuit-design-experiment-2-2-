@@ -1,6 +1,6 @@
 #include <fstream>
-#include <list>
 #include <string>
+#include <vector>
 using namespace std;
 
 class tree {
@@ -71,10 +71,16 @@ public:
 			} // 왼쪽부트리의 최대값 찾기
 			deleteNode->word = iter->word; // 기존값을 지우고 최대값으로 교체.
 
-			if (iter->left)
+			if (iter->left) {
 				upperNode->right = iter->left;
+				tree* iter2 = upperNode->right;
+				while (iter2) {
+					iter2->depth -= 1;
+					iter2 = iter2->left;
+				}
+			}
 			else
-				upperNode->right = iter;
+				upperNode->right = nullptr;
 			delete iter;
 		}
 		else { //deleteNode->right != nullptr
@@ -85,23 +91,93 @@ public:
 			} // 오른쪽부트리의 최소값 찾기
 			deleteNode->word = iter->word; // 기존값을 지우고 최소값으로 교체.
 
-			if (iter->right)
+			if (iter->right) {
 				upperNode->left = iter->right;
+				tree* iter2 = upperNode->left;
+				while (iter2) {
+					iter2->depth -= 1;
+					iter2 = iter2->right;
+				}
+			}
 			else
-				upperNode->left = iter;
+				upperNode->left = nullptr;
 			delete iter;
+		}
+	}
+	void printDepth(int depth, ofstream& out) {
+		if (!this)
+			return;
+		else if (this->depth == depth) {
+			out << this->word<<" ";
+		}
+		else {
+			this->left->printDepth(depth, out);
+			this->right->printDepth(depth, out);
+		}
+	}
+	int maxDepth(int depth = 0) {
+		depth++;
+		if (this->left == nullptr && this->right == nullptr) {
+			return depth;
+		}
+		else {
+			return (this->left->maxDepth(depth)) > (this->right->maxDepth(depth)) ? (this->left->maxDepth(depth)) : (this->right->maxDepth(depth));
+		}
+	}
+	void printLeafNode(ofstream& out) {
+		if (!this)
+			return;
+		else if (this->left == nullptr && this->right == nullptr)
+			out << this->word<<" ";
+		else {
+			this->left->printLeafNode(out);
+			this->right->printLeafNode(out);
 		}
 	}
 };
 
 int main(void) {
 	tree* BST = nullptr;
-	if (BST == nullptr)
-		BST = new tree("phone");
-
-	BST->addData("banana");
-	BST->addData("chip");
 	
+	ifstream ifp("1.inp");
+	ofstream ofp("bst.out");
+
+	int N;
+	string order;
+
+	ifp >> N;
+
+	for (int i = 0; i < N; i++) {
+		ifp >> order;
+		if (order == "+") {
+			ifp >> order;
+			if (BST == nullptr)
+				BST = new tree(order);
+			else
+				BST->addData(order);
+		}
+		else if (order == "-") {
+			ifp >> order;
+			BST->deleteData(order);
+		}
+		else if (order == "leaf") {
+			BST->printLeafNode(ofp);
+			ofp << endl;
+		}
+		else if (order == "depth") {
+			int k;
+			ifp >> k;
+			if (BST->maxDepth() < k)
+				ofp << "NO" << endl;
+			else {
+				BST->printDepth(k, ofp);
+				ofp << endl;
+			}
+		}
+		else {
+			exit(-1);
+		}
+	}
 	delete BST;
 	return 0;
 }
