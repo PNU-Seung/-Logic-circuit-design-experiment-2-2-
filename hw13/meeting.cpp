@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <list>
 #include <utility>
+
 #define vertexRequireTime 1
 #define edgeRequireTime 2
 #define infinite 100000
@@ -18,9 +19,6 @@ struct Graph {
 		input >> vertex;
 	}
 	Graph() {}
-	char getVertex(void) const {
-		return vertex;
-	}
 };
 list<pair<Graph, int>> Dijkstra_Algorithm(list<Graph> city, Graph startLocation);
 int main(void) {
@@ -34,7 +32,7 @@ int main(void) {
 	for (int i = 0; i < N; i++) {
 		char vertex; ifp >> vertex;
 		list<Graph>::iterator vertexIter = find_if(city.begin(), city.end(), [=](Graph iter) {
-			return iter.getVertex() == vertex;
+			return iter.vertex == vertex;
 		});
 		if (vertexIter == city.end()) {
 			city.emplace_back(vertex);
@@ -42,7 +40,7 @@ int main(void) {
 		}
 		while (ifp >> vertex && vertex != '$') {
 			list<Graph>::iterator nearVertexIter = find_if(city.begin(), city.end(), [=](Graph iter) {
-				return iter.getVertex() == vertex;
+				return iter.vertex == vertex;
 			});
 			if (nearVertexIter == city.end()) {
 				city.emplace_back(vertex);
@@ -56,9 +54,9 @@ int main(void) {
 	city.sort([](Graph A, Graph B) {
 		return A.vertex < B.vertex;
 	});
-	list<pair<Graph, int>> location1RoutingTable = Dijkstra_Algorithm(city, location1);
-	list<pair<Graph, int>> location2RoutingTable = Dijkstra_Algorithm(city, location2);
-	list<pair<Graph, int>> location3RoutingTable = Dijkstra_Algorithm(city, location3);
+	list<pair<Graph, int>> location1RoutingTable = Dijkstra_Algorithm(city, location1); //location1에서 다른 곳까지의 거리를 계산
+	list<pair<Graph, int>> location2RoutingTable = Dijkstra_Algorithm(city, location2); //location2에서 다른 곳까지의 거리를 계산
+	list<pair<Graph, int>> location3RoutingTable = Dijkstra_Algorithm(city, location3); //location3에서 다른 곳까지의 거리를 계산
 
 	char location;
 	int leastTime = infinite;
@@ -90,19 +88,17 @@ int main(void) {
 	return 0;
 }
 
-list<pair<Graph, int>> Dijkstra_Algorithm(list<Graph> city, Graph startLocation) {
+list<pair<Graph, int>> Dijkstra_Algorithm(list<Graph> city, Graph startLocation) { //다익스트라 알고리즘 변형.
 	struct myclass {
-		bool operator() (pair<Graph, int> arr1, pair<Graph, int> arr2) {
+		bool operator()(pair<Graph, int> arr1, pair<Graph, int> arr2) { // 거리가 짧은 곳이 앞에, 같은경우 알파벳 순서가 빠른게 앞으로 정렬.
 			if (arr1.second != arr2.second)
 				return (arr1.second < arr2.second);
 			else
 				return (arr1.first.vertex < arr2.first.vertex);
 		}
-	} myobject;
-
+	}myobject;
 	list<pair<Graph, int>> arr;
-
-	for (Graph& iter : city) {
+	for (Graph& iter : city) { // 자기자신까지의 거리는 0 나머지는 무제한.
 		if (iter.vertex == startLocation.vertex)
 			arr.emplace_back(iter, 0);
 		else
@@ -125,5 +121,4 @@ list<pair<Graph, int>> Dijkstra_Algorithm(list<Graph> city, Graph startLocation)
 		return arr1.first.vertex < arr2.first.vertex;
 	});
 	return arr;
-
 }
