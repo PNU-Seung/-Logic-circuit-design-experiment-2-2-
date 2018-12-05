@@ -20,7 +20,7 @@ struct Graph {
 	}
 	Graph() {}
 };
-list<pair<Graph, int>> Dijkstra_Algorithm(list<Graph> city, Graph startLocation);
+pair<char, int>* Dijkstra_Algorithm(list<Graph> city, Graph startLocation);
 int main(void) {
 	ifstream ifp("meeting.inp");
 	int N; ifp >> N;
@@ -48,47 +48,43 @@ int main(void) {
 			}
 			vertexIter->edge.push_back(&(*nearVertexIter));
 		}
-	}
-	ifp.close();
-	// 그래프 입력 끝.
+	}ifp.close();
+
 	city.sort([](Graph A, Graph B) {
 		return A.vertex < B.vertex;
 	});
-	list<pair<Graph, int>> location1RoutingTable = Dijkstra_Algorithm(city, location1); //location1에서 다른 곳까지의 거리를 계산
-	list<pair<Graph, int>> location2RoutingTable = Dijkstra_Algorithm(city, location2); //location2에서 다른 곳까지의 거리를 계산
-	list<pair<Graph, int>> location3RoutingTable = Dijkstra_Algorithm(city, location3); //location3에서 다른 곳까지의 거리를 계산
-
+	pair<char, int>* location1RoutingTable = Dijkstra_Algorithm(city, location1); //location1에서 다른 곳까지의 거리를 계산한 표
+	pair<char, int>* location2RoutingTable = Dijkstra_Algorithm(city, location2); //location2에서 다른 곳까지의 거리를 계산한 표
+	pair<char, int>* location3RoutingTable = Dijkstra_Algorithm(city, location3); //location3에서 다른 곳까지의 거리를 계산한 표
+	//RoutingTable은 알파벳 순서로 정렬 되어 있음.
 	char location;
 	int leastTime = infinite;
-	for (Graph iter : city) {
-		int time = 0;
-		for (pair<Graph, int> iter2 : location1RoutingTable)
-			if (iter.vertex == iter2.first.vertex) {
-				time = time < iter2.second ? iter2.second : time;
-				break;
-			}
-		for (pair<Graph, int> iter2 : location2RoutingTable)
-			if (iter.vertex == iter2.first.vertex) {
-				time = time < iter2.second ? iter2.second : time;
-				break;
-			}
-		for (pair<Graph, int> iter2 : location3RoutingTable)
-			if (iter.vertex == iter2.first.vertex) {
-				time = time < iter2.second ? iter2.second : time;
-				break;
-			}
+	int i = 0;
+	for (const Graph iter : city) {
+		int time =0;
+		if (location1RoutingTable[i].second > time)
+			time = location1RoutingTable[i].second;
+		if (location2RoutingTable[i].second > time)
+			time = location2RoutingTable[i].second;
+		if (location3RoutingTable[i].second > time)
+			time = location3RoutingTable[i].second;
 		if (time < leastTime) {
 			leastTime = time;
 			location = iter.vertex;
 		}
+		i++;
 	}
 	ofstream ofp("meeting.out");
 	ofp << location << endl << leastTime;
 	ofp.close();
+	delete[] location1RoutingTable;
+	delete[] location2RoutingTable;
+	delete[] location3RoutingTable;
+
 	return 0;
 }
 
-list<pair<Graph, int>> Dijkstra_Algorithm(list<Graph> city, Graph startLocation) { //다익스트라 알고리즘 변형.
+pair<char, int>* Dijkstra_Algorithm(list<Graph> city, Graph startLocation) { //다익스트라 알고리즘 변형.
 	struct myclass {
 		bool operator()(pair<Graph, int> arr1, pair<Graph, int> arr2) { // 거리가 짧은 곳이 앞에, 같은경우 알파벳 순서가 빠른게 앞으로 정렬.
 			if (arr1.second != arr2.second)
@@ -114,11 +110,19 @@ list<pair<Graph, int>> Dijkstra_Algorithm(list<Graph> city, Graph startLocation)
 				edgeIter->second = edgeIter->second < iter.second + (1 + 2) ? edgeIter->second : iter.second + (1 + 2);
 			else
 				edgeIter->second = edgeIter->second < iter.second + (1) ? edgeIter->second : iter.second + (1);
-			arr.sort(myobject);
+			arr.sort(myobject);  // 거리 정보 갱신-> 앞으로 오도록 정렬.
 		}
 	}
 	arr.sort([](pair<Graph, int> arr1, pair<Graph, int> arr2) {
 		return arr1.first.vertex < arr2.first.vertex;
 	});
-	return arr;
+	pair<char, int>* routingTable = new pair<char, int>[city.size()];
+
+	int i = 0;
+	for (pair<Graph, int> iter : arr) {
+		routingTable[i].first = iter.first.vertex;
+		routingTable[i].second = iter.second;
+		i++;
+	}
+	return routingTable;
 }
