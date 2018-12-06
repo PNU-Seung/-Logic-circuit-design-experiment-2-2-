@@ -107,9 +107,9 @@ pair<char, int>* Dijkstra_Algorithm(list<Graph> city, Graph startLocation) { //�
 				return node.first.vertex == edges->vertex;
 			});
 			if (iter.first.vertex != arr.front().first.vertex)
-				edgeIter->second = edgeIter->second < iter.second + (1 + 2) ? edgeIter->second : iter.second + (1 + 2);
+				edgeIter->second = edgeIter->second < iter.second + (vertexRequireTime + edgeRequireTime) ? edgeIter->second : iter.second + (vertexRequireTime + edgeRequireTime);
 			else
-				edgeIter->second = edgeIter->second < iter.second + (1) ? edgeIter->second : iter.second + (1);
+				edgeIter->second = edgeIter->second < iter.second + (vertexRequireTime) ? edgeIter->second : iter.second + (vertexRequireTime);
 			arr.sort(myobject);  // 거리 정보 갱신-> 앞으로 오도록 정렬.
 		}
 	}
