@@ -1,9 +1,10 @@
-#include <bits/stdc++.h>
-
+#include <fstream>
+#include <string>
+#include <list>
+#include <algorithm>
 using namespace std;
 
-class org {
-private:
+struct org {
 	org* boss = NULL;
 	string name;
 	int servant_count = 0;
@@ -11,24 +12,6 @@ private:
 public:
 	org(string name, org* boss) :name(name), boss(boss) {}
 	org(string name) : name(name) {}
-
-	void setBoss(org* boss) {
-		this->boss = boss;
-	}
-	void setHeight(int height) {
-		this->height = height;
-	}
-	string getName(void) const {
-		return name;
-	}
-	int getServantCount(void) const {
-		return servant_count;
-	}
-	int getHeight(void) const {
-		return height;
-	}
-	friend int countHeight(const org* node, int height);
-	friend void setServantCount(org* node);
 };
 int countHeight(const org* node, int height = 0) {
 	height += 1;
@@ -53,42 +36,42 @@ int main(void) {
 
 	string name, boss_name;
 	while (ifp >> name && ifp >> boss_name) {
-		list<org>::iterator bossIter = std::find_if(Organization.begin(), Organization.end(), [=](org a) {return (a.getName() == boss_name); });
-		list<org>::iterator nameIter = std::find_if(Organization.begin(), Organization.end(), [=](org a) {return (a.getName() == name); });
+		list<org>::iterator bossIter = std::find_if(Organization.begin(), Organization.end(), [=](org a) {return (a.name == boss_name); });
+		list<org>::iterator nameIter = std::find_if(Organization.begin(), Organization.end(), [=](org a) {return (a.name == name); });
 		if (nameIter == Organization.end()&& bossIter == Organization.end()) {
 			Organization.emplace_back(boss_name);
 			Organization.emplace_back(name, &(Organization.back()));
 		}
 		else if(nameIter != Organization.end() && bossIter == Organization.end()) {
 			Organization.emplace_back(boss_name);
-			nameIter->setBoss(&Organization.back());
+			nameIter->boss = &Organization.back();
 		}
 		else if (nameIter == Organization.end() && bossIter != Organization.end()) {
 			Organization.emplace_back(name);
-			Organization.back().setBoss(&(*bossIter));
+			Organization.back().boss = &(*bossIter);
 		}
 		else { //nameIter != Organization.end()&& bossIter != Organization.end()
-			nameIter->setBoss(&(*bossIter));
+			nameIter->boss= &(*bossIter);
 		}
 	}ifp.close();
 
 	for (org& iter : Organization) {
-		iter.setHeight(countHeight(&iter));
+		iter.height = countHeight(&iter);
 		setServantCount(&iter);
 	}
 	Organization.sort([](const org A, const org B) {
-		if (A.getServantCount() != B.getServantCount())
-			return (A.getServantCount() > B.getServantCount());
+		if (A.servant_count != B.servant_count)
+			return (A.servant_count > B.servant_count);
 		else {
-			if (A.getHeight() != B.getHeight())
-				return (A.getHeight() > B.getHeight());
+			if (A.servant_count != B.servant_count)
+				return (A.servant_count > B.servant_count);
 			else
-				return (A.getName() < B.getName());
+				return (A.name < B.name);
 		}
 	});
 	ofstream ofp("org.out");
 	for (const org iter : Organization) {
-		ofp << iter.getName() << " ";
+		ofp << iter.name << " ";
 	}ofp.close();
 	
 	return 0;
