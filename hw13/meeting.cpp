@@ -1,8 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <list>
-#include <utility>
+#include <bits/stdc++.h>
 
 #define vertexRequireTime 1
 #define edgeRequireTime 2
