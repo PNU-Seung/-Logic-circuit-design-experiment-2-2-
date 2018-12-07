@@ -29,6 +29,7 @@ int main(void) {
 	std::ifstream ifp("log.inp");
 	std::ofstream ofp("log.out");
 	int N, K;
+
 	ifp >> N >> K;
 	int u, s, e;
 	for (int i = 0; i < N; i++) {
